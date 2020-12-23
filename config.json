@@ -1,0 +1,12 @@
+{
+    "training_data":"data/train.csv",
+    "testing_data": "data/test.csv",
+    "max_sequence_len": "",
+    "epochs": 100,
+    "batch_size":32,
+    "working_dir": "./",
+    "meta_path":"2020-12-23_02-48-39/meta.bin",
+    "model_ckpt_path": "2020-12-23_02-48-39/model_ckpt/74.hdf5",
+    "prediction_save_path":"2020-12-23_02-48-39"
+}
+
