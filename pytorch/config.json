@@ -9,7 +9,7 @@
     "train_file": "data/train.csv",
     "model_save_path": "model/",
     "optimizer_save_path":"optimizer/",
-    "max_epoch": 100,
+    "max_epoch": 1000,
     "log_freq": 1,
     "log_dir": "logs/",
     "validation_freq": 20,
