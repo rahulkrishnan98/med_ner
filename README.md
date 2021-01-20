@@ -26,3 +26,5 @@ Training a model is via driver.py file and it also saves the best model. To chan
 
 Setting mode to ***train*** in *config.json* [Default] runs train loop from driver.py. To run model inference or test, change this json param to ***test***.
 
+## TODO 
+1. Test method in driver [Possible bug in batch_iter]
