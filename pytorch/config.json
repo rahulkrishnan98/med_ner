@@ -22,7 +22,7 @@
     "patience_threshold": 3,
     "max_decay": 4,
     "lr_decay": 0.5,
-    "RUN_MODE":"train",
+    "RUN_MODE":"test",
     "test_file": "data/test.csv",
     "MODEL_CKPT": "model/model.pth",
     "prediction_save_file": "predictions.csv"

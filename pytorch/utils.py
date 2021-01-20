@@ -1,7 +1,11 @@
 import pandas as pd 
 import os
+import string
+import re
+import itertools
 import random
 import torch
+import torch.nn as nn
 from sklearn.model_selection import train_test_split
 
 def getData(
@@ -99,3 +103,20 @@ def pad(data, padded_token, device):
     for s in data:
         padded_data.append(s + [padded_token] * (max_len - len(s)))
     return torch.tensor(padded_data, device=device), lengths
+
+#TODO, find right tokenization
+def tokenize(
+    text
+):
+    separators = string.punctuation + string.whitespace
+    separators_re = "|".join(re.escape(x) for x in separators)
+    tokens = zip(re.split(separators_re, text), re.findall(separators_re, text))
+    flattened = itertools.chain.from_iterable(tokens)
+    cleaned = [x for x in flattened if x and not x.isspace()]
+    return cleaned
+
+def getConfidence(
+    logits
+):
+    softmax = nn.Softmax(dim=1)
+    return softmax(logits)

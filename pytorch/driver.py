@@ -108,6 +108,7 @@ def test(args, device):
     sentences = utils.words2indices(sentences, sent_vocab)
     tags = utils.words2indices(tags, tag_vocab)
     test_data = list(zip(sentences, tags))
+    print(test_data[0])
     print('num of test samples: %d' % (len(test_data)))
 
     model = Model.BiLSTMCRF.load(args['MODEL_CKPT'], device)
@@ -127,6 +128,42 @@ def test(args, device):
                     result_file.write(' '.join([sent_vocab.id2word(token), tag_vocab.id2word(true_tag),
                                                 tag_vocab.id2word(pred_tag)]) + '\n')
                 result_file.write('\n')
+
+def inference(
+    text, args, device
+):
+    sent_vocab = BuildVocab.load(os.path.join(args['SENT_VOCAB_PATH'], "sent_vocab.json"))
+    tag_vocab = BuildVocab.load(os.path.join(args['TAG_VOCAB_PATH'], "tag_vocab.json"))
+    
+    #tokenization
+    sentences = text.split(" ")
+    tags = ['O']*len(sentences)
+    sentences = [sentences]
+    tags = [tags]
+
+    ###Remaining are same as test code
+    sentences = utils.words2indices(sentences, sent_vocab)
+    tags = utils.words2indices(tags, tag_vocab)
+
+    model = Model.BiLSTMCRF.load(args['MODEL_CKPT'], device)
+    print('start testing...')
+    print('using device', device)
+
+    with torch.no_grad():
+        padded_sentences = torch.tensor(sentences, device=device)
+        print(padded_sentences)
+        sent_lengths = len(padded_sentences[0])
+        # padded_sentences, sent_lengths = utils.pad(sentences, sent_vocab[sent_vocab.PAD], device)
+        predicted_tags = model.predict(padded_sentences, torch.tensor([sent_lengths]))
+        sentence =  list(map(lambda x: sent_vocab.id2word(x), sentences[0]))
+        dd = {
+            "sentence": sentence,
+            "prediction": predicted_tags[0]
+        }
+        print(dd)
+
+            
+
 
 def cal_dev_loss(model, dev_data, batch_size, sent_vocab, tag_vocab, device):
     """ 
@@ -169,3 +206,9 @@ if __name__ == "__main__":
         test(config, device)
     else:
         train(config, device, writer)
+    
+    inference(
+        "Chronic administration of haloperidol increased Dpp6",
+        config,
+        device
+    )
